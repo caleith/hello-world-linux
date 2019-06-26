@@ -11,6 +11,8 @@ import sys
 
 junos_hosts = ["vMX-1","vMX-2"]
 
+pw=getpass.getpass()
+
 for host in junos_hosts:
 	with open(host + ".yml", "r") as yml_var:
 		data = yaml.load(yml_var.read(), Loader=yaml.FullLoader)
@@ -20,12 +22,13 @@ for host in junos_hosts:
 	template = Template(t_format)
 	myConfig = template.render(data)
 
+
 	print ("\nResults for device " + host + "\n-------------------")
 
 	print(myConfig)
 
 	try:
-		dev = Device(host=host, user="lab", password="lab123")
+		dev = Device(host=host, user="lab", password=pw)
 		dev.open()
 		config = Config(dev)
 		config.lock()
